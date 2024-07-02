@@ -1,73 +1,45 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## @weirdnest/boilerplate
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Boilerplate code and resource generator for Nest.js micro-services with `RabbitMQ` and `TypeORM`.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features:
 
-## Description
+- Gateway with REST API and websockets
+- Provider/Consumer for RabbitMQ microservices
+- Helper to generate new resources
+- Tracking requests by id, request context module
+- Abstractions for services and repositories
+- Logger extension involving context
+- Transaction interceptor
+- Exception filters
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Structure:
 
-## Installation
+It follows Nest.js multiple apps mono-repository structure.
 
-```bash
-$ npm install
-```
+Libraries are created with `@libs` prefix.
 
-## Running the app
+- `apps/app-content` - sample microservice with `Article` resources
+- `apps/app-gate` - REST API gateway
+- `libs/articles` - resource sample, source for generator
+- `libs/shared` - infrastructure layer with shared dependencies
+- `scripts/generate.sh` - script to save time when creating new resource. It runs `nest g resource...`, then replaces new content using `awk`, `sed` and the `libs/articles` folder.
+
+One of the ways to extend it - add more libraries for microservices and resources (ex. `libs/api-content`) and more apps accordingly. Along with infrastructure layer (`libs/shared`) there can be application layer (ex. `libs/app`) layer for customised entities, DTO and controllers.
+
+## How to use
+
+### Run sample applications
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+bun run start:dev app-gate # API gateway
+bun run start:dev app-content # microservice
 ```
 
-## Test
+### Generate resource:
+
+Generate `pages` resource in `api-content` project (as per `nest-cli.json`):
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+bash scripts/generate.sh -p api-content -r pages
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
